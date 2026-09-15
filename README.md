@@ -2,6 +2,12 @@
 
 **Field notes from one small business that runs on AI agents. Unsupported. Chapters last verified end to end 2026-09-05; anything dated later in a chapter was added since and has not had that pass.**
 
+**Status: actively maintained by one person, as of 2026-09-15.** These notes track a system that is
+still being built, by the person running it, between service calls. Chapters carry their own status
+lines — "in use", "design only, not built", "design, partly practiced" — and those are load-bearing,
+not decoration. If the last commit here is more than six months old, assume it went unmaintained and
+check anything security-shaped against a current source before you rely on it.
+
 **Read this first:** unattended agents with live credentials can spend money, leak data, and break production. These notes describe how one shop keeps that from happening. They are not a product, not advice, and not a promise that it will work for you. Nobody runs your fleet but you.
 
 ## What this is

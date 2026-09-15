@@ -59,6 +59,21 @@ None of these is a security breach on its own. Each is the shape of one starting
 
 Compared with running agents on your daily laptop: an old PC as the worker is the right call. Compared with a supervised session: an unattended loop is a small company with no manager on the floor. The walls above are the manager. The review's closing line, kept on purpose: subscriptions don't make autonomy safer; they make the loops more expensive when something goes wrong.
 
+## This chapter is a map, not a finished building
+
+**Read this before the table below.** An outside review of this plan on 2026-09-09 said a
+known-gap security case study is useful *after* the gaps are closed and a map *before*, and
+recommended holding this chapter back until three specific walls existed. Two of the three exist.
+**The third does not: there is no outbound allowlist on the worker, and the wrapper that guardrail
+10 describes is not built.** The display-only console user and the full kill-switch rehearsal are
+both partial.
+
+It is published anyway, with this paragraph, because a map of a half-built system is more useful to
+a stranger than silence — and because every row below carries its own status rather than an
+impression. **Do not read a CLOSED row as a finished posture.** Read the OPEN and PARTLY rows as
+the honest shape of what one small shop has actually managed, which is not the same as what it
+should have.
+
 ## Status of each hole, at last verification
 
 **What these closed rows do NOT close.** Each row above closes the specific hole it names,
