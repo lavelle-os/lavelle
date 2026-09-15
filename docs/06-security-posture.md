@@ -61,18 +61,14 @@ Compared with running agents on your daily laptop: an old PC as the worker is th
 
 ## This chapter is a map, not a finished building
 
-**Read this before the table below.** An outside review of this plan on 2026-09-09 said a
-known-gap security case study is useful *after* the gaps are closed and a map *before*, and
-recommended holding this chapter back until three specific walls existed. Two of the three exist.
-**The third does not: there is no outbound allowlist on the worker, and the wrapper that guardrail
-10 describes is not built.** The display-only console user and the full kill-switch rehearsal are
-both partial.
+**Read this before the table.** An outside review said a known-gap case study is useful *after* the
+gaps close and a map *before*, and advised holding this chapter until three walls existed. Two do.
+**The third does not: no outbound allowlist on the worker, and no wrapper.** The display-only
+console user and the full kill-switch rehearsal are partial.
 
-It is published anyway, with this paragraph, because a map of a half-built system is more useful to
-a stranger than silence — and because every row below carries its own status rather than an
-impression. **Do not read a CLOSED row as a finished posture.** Read the OPEN and PARTLY rows as
-the honest shape of what one small shop has actually managed, which is not the same as what it
-should have.
+Published anyway, with this paragraph, because a map of a half-built system beats silence.
+**Do not read a CLOSED row as a finished posture.** The OPEN and PARTLY rows are the honest shape
+of what one small shop has managed, which is not what it should have.
 
 ## Status of each hole, at last verification
 
