@@ -10,6 +10,14 @@ check anything security-shaped against a current source before you rely on it.
 
 **Read this first:** unattended agents with live credentials can spend money, leak data, and break production. These notes describe how one shop keeps that from happening. They are not a product, not advice, and not a promise that it will work for you. Nobody runs your fleet but you.
 
+**What these notes are NOT, said plainly because a disclaimer nobody can find is decoration:**
+
+- **Not a security product.** The chapter called "Security posture" is one shop's account of holes it found and what it did about them, with the still-open ones marked open. It is not a control set, not an audit, and not a thing you can adopt and call yourself covered.
+- **Not legal, tax, or professional advice.** Where these notes touch law, licensing, employment or money, the rule in them is to stop and get a second model and a human professional. Do the same.
+- **Do not connect production credentials to anything here until you have done Layer 4.5 of the deploy guide in the linked phone repository, or its equivalent for whatever you are wiring up.** An unprotected endpoint is harmless the day it returns an example and expensive the day it reaches your calendar.
+- **Written for one owner with one set of hands.** Every gate in here assumes a single person whose judgement is the last word. A second human with push access or a shared subscription walks around most of it, and nothing here tells you how to handle that.
+- **AS IS, with no duty to update.** See the licence. Nobody here is obliged to fix, maintain, or warn you when something in these notes stops being true.
+
 ## What this is
 
 The rules, the guardrails, the file structure, and the hardware recipe one person uses to run a trade business, a parts store, and a video channel on agents that work while they don't. Written by an appliance repairman who is not a programmer. Every rule is tied to the incident that caused it, and the incident is written next to the rule.
