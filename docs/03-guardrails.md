@@ -54,7 +54,7 @@ Content built from the owner's own material, video captions, call transcripts, f
 
 Content that publishes itself, blog posts, neighborhood pages, descriptions, needs a review rule: a human reads before publish, or reads a fixed sample of every batch, and there is a rollback path.
 
-**What went wrong:** the SEO loop wrote fifteen to twenty posts and a set of neighborhood pages and published them. The owner read one, judged it good, and the rest went live unread. They ranked. That is a demo of the system and also the exact thing a stranger should be warned about.
+**What went wrong:** the SEO loop wrote fifteen to twenty posts and a set of neighborhood pages and published them. The owner read one, judged it good, and the rest went live unread. That is a demo of the system and also the exact thing a stranger should be warned about.
 
 ## 8. Rollback, not just a snapshot
 
