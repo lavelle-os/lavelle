@@ -18,6 +18,12 @@ check anything security-shaped against a current source before you rely on it.
 - **Written for one owner with one set of hands.** Every gate in here assumes a single person whose judgement is the last word. A second human with push access or a shared subscription walks around most of it, and nothing here tells you how to handle that.
 - **AS IS, with no duty to update.** See the licence. Nobody here is obliged to fix, maintain, or warn you when something in these notes stops being true.
 
+## Start here, one sentence
+
+Make one file your agents read before anything else, put three things in it, who they work for, what they may never touch, and how the owner is doing today, and give no agent a live credential until that file exists.
+
+That is the method at its smallest, and it is the ride-along before the keys. The rest of these notes are what one shop wrote into that file and what went wrong on the way. Each of the three things has a chapter: who they work for is [the operator profile](docs/08-operator-profile.md), what they may never touch is [the guardrails](docs/03-guardrails.md), and how the owner is doing today is [the owner-state gate](docs/01-owner-state-gate.md). Status in this shop: the file is in use, as a `CLAUDE.md` at the top of every project since August 2026; the operator profile chapter that would turn it into a form is design only, not built.
+
 ## What this is
 
 The rules, the guardrails, the file structure, and the hardware recipe one person uses to run a trade business, a parts store, and a video channel on agents that work while they don't. Written by an appliance repairman who is not a programmer. Every rule is tied to the incident that caused it, and the incident is written next to the rule.
