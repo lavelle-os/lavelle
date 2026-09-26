@@ -19,7 +19,7 @@ if (verb === "init") {
   code = await init({ questionsDir, again: flags.has("--again") });
 } else if (verb === "add" && noun === "phone") {
   const { addPhone } = await import("../lib/phone.mjs");
-  code = await addPhone({ dryRun: flags.has("--dry-run") });
+  code = await addPhone({ questionsDir, dryRun: flags.has("--dry-run") });
 } else if (verb === "doctor") {
   const { doctor } = await import("../lib/doctor.mjs");
   code = doctor({ questionsDir });

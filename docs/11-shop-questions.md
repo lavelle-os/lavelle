@@ -2,7 +2,7 @@
 
 *The second setup conversation. Chapter 10 asks who the owner is. This one asks what the business promises a customer, because that is the layer an agent gets wrong in public.*
 
-**Status: design, not built. Drafted 2026-09-14 at level, daytime. The question bank in `questions/` is extracted from one working shop and has not yet been answered by a second one, which is the only test that matters. See "How you know the list is good."**
+**Status: design, read by code since 2026-09-26. Drafted 2026-09-14 at level, daytime. The command in chapter 12 now reads the bank in `questions/` and asks it; two of its rules (question 1 on recording, question 113 on the transfer loop) hold in code there. The bank itself is extracted from one working shop and has not yet been answered by a second one, which is still the only test that matters. See "How you know the list is good."**
 
 ## Why this is a separate chapter
 
@@ -67,7 +67,7 @@ prompt a fourth time.
 
 ### Known failure mode for this section
 
-Tagging an answer `code` does not make it code. Nothing in the bank is built, and a tag is a claim
+Tagging an answer `code` does not make it code. As of chapter 12, two of the bank's rules hold in code (questions 1 and 113) and the rest do not, and a tag is a claim
 about where the answer belongs, not a report that it is there. The tag earns its keep only when
 somebody checks whether the guard exists, which is a question for the ledger in chapter 7 and not
 for this chapter. Status: design, 2026-09-14.

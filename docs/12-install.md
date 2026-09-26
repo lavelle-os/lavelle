@@ -1,6 +1,6 @@
 # Install
 
-*The first thing in these notes that runs. One command asks the questions from chapters 10 and 11, writes two files, and stands up the phone from the answers. Everything before this chapter was a method. This is the method with a hand on it.*
+*The first thing in these notes that runs. One command asks four questions for the owner file and then the shop questions from chapter 11, writes two files, and stands up the phone from the answers. Chapter 10's thirty questions are not in it yet. Everything before this chapter was a method. This is the method with a hand on it.*
 
 **Status: built 2026-09-26, run end to end with an invented shop and no network on the machine it was written on and on a second machine the same day (an Ubuntu server, node 18, a fresh folder), not yet run by a second person.** The command lives in `bin/lavelle` with its parts in `lib/`. The test in `test/run.sh` is the proof that exists: thirteen checks, passing on both machines. The half of the stranger test that matters is the person, not the machine: someone who did not build it, typing the two commands and writing down what broke. Until that has happened, "built" means "runs for the person who built it, in two places," which is only a little stronger than the weakest thing that word can mean.
 
@@ -14,13 +14,13 @@ One command, three verbs, no dependencies beyond node. The verbs are named for w
 | `lavelle add phone` | stands up the receptionist from those answers |
 | `lavelle doctor` | says what exists, what is missing, what could not be reached |
 
-The files go in a folder named `lavelle` in the current directory, or wherever `LAVELLE_HOME` points. Nothing is written anywhere else. No account is created, no key is stored, and nothing leaves the machine. The command holds none of the owner's data because it never has any; the answers sit in a folder the owner can read with any text editor.
+The files go in a folder named `lavelle` in the current directory, or wherever `LAVELLE_HOME` points. For `init` and `doctor` that is the whole story: nothing is written anywhere else, no account is touched, and nothing leaves the machine. `add phone` is different and the chapter says so plainly: on a live run it hands the key from the environment to the voice kit's installer, which creates an assistant on the owner's account with the phone vendor and writes a build brief into the kit's own folder. No file here ever stores the key. The command holds none of the owner's data because it never has any; the answers sit in a folder the owner can read with any text editor.
 
 ## What init asks, and in what order
 
 Three parts, in the order chapter 1 says the owner file goes.
 
-**The owner file first.** Who the agents work for, what the business is in a few words, what the agents may never touch, and how the owner is doing today. That last one is a single word, level, elevated, low or unknown, and anything else is recorded as unknown, which is treated as elevated. It is a word and not a note on purpose: this file will be read by every agent, and a note about a person does not belong in front of every agent.
+**The owner file first.** Three things in four questions: who the agents work for and what the business is, what the agents may never touch, and how the owner is doing today. That last one is a single word, level, elevated, low or unknown, and anything else is recorded as unknown, which is treated as elevated. It is a word and not a note on purpose: this file will be read by every agent, and a note about a person does not belong in front of every agent. This is the one-page front of what chapter 8 calls the operator profile; the rest of that profile is not asked here.
 
 **The blocking questions second.** Chapter 11 names seventeen questions with no default. The command reads them straight from the files in `questions/`; there is no second copy of the bank in code, because two copies drift. A blocking question with no answer stops the install and nothing is written, with the list of what was left blank. That is the rule from chapter 11 made mechanical: a blank is configuration, a guess is a wrong system, and a blocking blank is neither, it is a stop.
 
@@ -32,11 +32,14 @@ At the end it prints what it wrote, how many answers were given, how many defaul
 
 The receptionist is built by the voice kit's own installer, the one in the linked phone repository. `add phone` does not reimplement it. It reads `lavelle.json`, asks the three things the kit needs that the bank does not hold (the number the agent answers, the number a transfer rings, whether the agent books or only takes messages), and then runs the kit's installer with those answers piped in, in the order the kit asks. The owner answers each question once, in one place.
 
-Three refusals, each of them a rule from the bank with `Holds: code` beside it:
+Six refusals, in the order they are checked. Nothing is written to `lavelle.json` until all six have passed.
 
+- **Any of the seventeen blocking answers missing: refused.** The same count `doctor` prints. Nothing else is allowed to run without it.
+- **The recording answer is not a yes: refused.** This is question 1, and it holds in code. The kit's greeting tells every caller the call is recorded, so the only answer this command can honor is "yes, and the caller is told." Any other answer is a legal question this command must not decide for the owner.
 - **No transfer number, no install.** A transfer that rings nowhere is a caller on hold.
-- **The transfer number is the agent's own number: refused, not warned.** This is question 113. A business line forwarded to the agent, with the agent told to transfer to the business line, forwards straight back into the agent, and it does that forever. The minimum working setup is two numbers: the forwarded one the agent answers, and an unforwarded one a human answers.
-- **No key in the environment, no install.** The key is read from `VAPI_API_KEY` and nowhere else. It is never written to a file by anything here.
+- **The transfer number is the agent's own number: refused, not warned.** This is question 113. A business line forwarded to the agent, with the agent told to transfer to the business line, forwards straight back into the agent, and it does that forever. The two numbers are compared as digits with a leading US country code dropped, so the same line spelled two ways is still the same line. The minimum working setup is two numbers: the forwarded one the agent answers, and an unforwarded one a human answers.
+- **No key in the environment, or no kit on disk: refused.** The key is read from `VAPI_API_KEY` and nowhere else, and is never written to a file by anything here. The kit is looked for in `modules/vapi-voice-tuneup` or wherever `LAVELLE_VOICE_KIT` points, and the command prints the clone line if it is absent.
+- **The kit's questions have moved: refused.** The command reads the kit's installer before running it and checks that the eight questions it answers are still there, in order. A kit that adds or reorders a question would otherwise take every later answer for the wrong question, and this command would never know.
 
 **What went wrong, 2026-09-15.** The operator's own transfer had gone to an entirely separate phone for months, and nobody writing the bank had known that was load-bearing until he pointed it out. The rule was written that day, and the deploy was told to refuse rather than warn, because a warning about a loop is read after the loop has started.
 
@@ -63,10 +66,11 @@ Every question can be answered from a file: one line per answer, in the order as
 
 ## Starting yours
 
-1. Clone the repository and run `bin/lavelle` with no verb. Read the list.
-2. Run `lavelle init` in an empty folder. Answer the seventeen honestly, including the ones where the honest answer is "we don't do that."
-3. Open `lavelle/owner.md` and `lavelle/lavelle.json` and read your answers as a caller would hear them.
-4. Run `lavelle doctor`. Everything it can see should say ok except the kit and the key.
-5. Run `lavelle add phone --dry-run` and read what it would send before it sends anything.
-6. Get the kit, set the key in the environment for one terminal session, run `lavelle add phone`, and make the test call from the kit's protocol before any real caller does.
-7. The first thing that will go wrong: the number you give as the transfer number is the one you just forwarded to the agent, and the command will refuse you. That refusal is the chapter working.
+1. Install node, version 18 or newer, from nodejs.org. Everything below is typed into the Terminal app, from inside the cloned folder.
+2. Type `bin/lavelle` with nothing after it. Read the list.
+3. Type `bin/lavelle init`. It writes into a folder named `lavelle` inside the clone. Answer the seventeen honestly, including the ones where the honest answer is "we don't do that."
+4. Open `lavelle/owner.md` and `lavelle/lavelle.json` and read your answers as a caller would hear them.
+5. Type `bin/lavelle doctor`. Everything it can see should say ok except the kit and the key, and it will exit with a 1 because of those two.
+6. Type `bin/lavelle add phone --dry-run` and read what it would send before it sends anything.
+7. Get the kit with the clone line the dry run printed, set the key in the environment for one terminal session, type `bin/lavelle add phone`, and make the test call from the kit's protocol before any real caller does.
+8. The first thing that will go wrong: the number you give as the transfer number is the one you just forwarded to the agent, and the command will refuse you. That refusal is the chapter working.

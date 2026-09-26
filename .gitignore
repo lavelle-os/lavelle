@@ -1,3 +1,7 @@
+# The private names list the gate script reads. Never committed.
+.gate-names
+scripts/.gate-names
+# An install made inside the clone, the voice kit if cloned here, and node's folder.
 lavelle/
 modules/
 node_modules/

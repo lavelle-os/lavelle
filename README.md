@@ -48,7 +48,7 @@ The worked example throughout is a real repair shop in Alabama and its public pa
 | [The threat model](docs/09-threat-model.md) | Design, partly practiced. What the system actually holds and who would want it: the words, the assets ranked by what losing them costs, and the actors. |
 | [Breach surfaces](docs/09-breach-surfaces.md) | Design, partly practiced. Where an attacker gets in and what it costs: the boundary on each surface, what a stolen profile enables in detail, the second-user line, and how this fails. |
 | [The setup conversation](docs/10-setup-conversation.md) | Design only, not built. Thirty questions, in order, that build the operator profile as a conversation, with the never list enforced while they're asked. |
-| [The shop questions](docs/11-shop-questions.md) | Design only, not built. The second setup conversation: 112 questions that configure what the business promises a customer, sixteen of them blocking, and each tagged for whether it holds in code or in a prompt (96 to 16), with the bank in [questions/](questions/) and the ones this trade never had to answer in [questions/unanswered.md](questions/unanswered.md). |
+| [The shop questions](docs/11-shop-questions.md) | Design, read by code since 2026-09-26 (chapter 12). The second setup conversation: 113 questions that configure what the business promises a customer, seventeen of them blocking, and each tagged for whether it holds in code or in a prompt (96 to 16), with the bank in [questions/](questions/) and the ones this trade never had to answer in [questions/unanswered.md](questions/unanswered.md). |
 | [Install](docs/12-install.md) | Built, not yet run by a stranger. One command: `init` asks the questions and writes the owner file, `add phone` stands up the receptionist from the answers, `doctor` reports. |
 | [Dictionary](docs/dictionary.md) | In use. The names and terms dictation gets wrong, with the right spelling, for any transcript-cleaning step. |
 
@@ -60,15 +60,16 @@ The worked example throughout is a real repair shop in Alabama and its public pa
 ## What this is not
 
 - Not an operating system. That word was used in early drafts and it's a promise these notes can't keep.
-- Not an installer. Recipes you can read, in the order they were done, with the failure points marked. If an installer ever exists it will come after strangers have cooked from the recipes.
+- Not a finished installer. One command runs (chapter 12): it asks the shop questions, writes the owner file, and stands up the phone from the answers. It has been run by its author on two machines and by nobody else. Everything else is recipes you can read, in the order they were done, with the failure points marked.
 - Not private-by-architecture. The local model keeps one workload in the house. The business itself talks to a phone service, a video platform, a store, suppliers, and a git host.
 - Not maintained on a schedule. Budget for it is a few hours a month when quiet and more when not; if the last-verified date above is old, assume drift.
 
 ## What this is, and is not
 
-Notes, not software. There is no installer and nothing here to run except one shell script
-that checks a commit for identifiers before it leaves your machine. Everything else is meant
-to be read, argued with, and adapted by hand. A recipe you can read beats a script you can't.
+Notes first, then one command. Two things here run: a shell script that checks a commit for
+identifiers before it leaves your machine, and `bin/lavelle`, which asks the shop questions and
+stands up the phone (chapter 12, built 2026-09-26, not yet run by a stranger). Everything else is
+meant to be read, argued with, and adapted by hand. A recipe you can read beats a script you can't.
 
 ## License
 
