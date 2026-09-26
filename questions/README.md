@@ -2,7 +2,7 @@
 
 *The shop questions, one file per topic. Chapter 11 says what these are for and how to tell whether the list is any good.*
 
-**Status: design, not built. Extracted 2026-09-14 from one working appliance repair shop. Not yet answered by a second shop.**
+**Status: read by the installer since 2026-09-26 (chapter 12); still not answered by a second shop. Extracted 2026-09-14 from one working appliance repair shop.**
 
 ## The format
 
@@ -19,7 +19,7 @@ Incident: the thing that went wrong and made this a rule. Only where there is on
 
 - **A question that cannot name what it writes is not in the bank.** It goes in `unanswered.md` until somebody can say what it changes.
 - **`[BLOCKING]` means no default exists and nothing runs until it is answered.** Seventeen of them, listed in chapter 11. A question with a written default is not blocking, however important it feels.
-- **Field names are a proposal.** Nothing reads them yet.
+- **Field names are read by code now.** `lavelle init` (chapter 12) reads every entry in these files, asks it, and writes the answer under the field named here. Rename a field and you have changed what the installer writes; `add phone` reads `area.definition`, `phone.transfer_number` and `voice.pronunciations` by name.
 - **No answers from the worked example are printed here.** The shop's fees, its excluded brands, its covered streets and its call scripts are customer-facing facts that join back to real people. Chapter 11 and `PUBLIC-IDENTITY.md` cover why. The questions are the transferable part; the answers never were.
 - **`Holds: code` means the answer must not live in a prompt.** Either a guard that refuses, or a
   fact generated into the prompt from the same place the code reads it, so the two cannot drift.

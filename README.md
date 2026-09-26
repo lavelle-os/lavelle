@@ -49,6 +49,7 @@ The worked example throughout is a real repair shop in Alabama and its public pa
 | [Breach surfaces](docs/09-breach-surfaces.md) | Design, partly practiced. Where an attacker gets in and what it costs: the boundary on each surface, what a stolen profile enables in detail, the second-user line, and how this fails. |
 | [The setup conversation](docs/10-setup-conversation.md) | Design only, not built. Thirty questions, in order, that build the operator profile as a conversation, with the never list enforced while they're asked. |
 | [The shop questions](docs/11-shop-questions.md) | Design only, not built. The second setup conversation: 112 questions that configure what the business promises a customer, sixteen of them blocking, and each tagged for whether it holds in code or in a prompt (96 to 16), with the bank in [questions/](questions/) and the ones this trade never had to answer in [questions/unanswered.md](questions/unanswered.md). |
+| [Install](docs/12-install.md) | Built, not yet run by a stranger. One command: `init` asks the questions and writes the owner file, `add phone` stands up the receptionist from the answers, `doctor` reports. |
 | [Dictionary](docs/dictionary.md) | In use. The names and terms dictation gets wrong, with the right spelling, for any transcript-cleaning step. |
 
 ## Related, and public
