@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+// lavelle is the one command. It reads the verb and hands off to the file named for that verb.
+//   lavelle init            ask the questions, write owner.md and lavelle.json
+//   lavelle add phone       stand up the receptionist from those answers (--dry-run to see what it would do)
+//   lavelle doctor          say what exists, what is missing, what could not be reached
+// A veteran would call this a dispatcher with a switch statement and find it ordinary.
+// The owner's choice in it: there is no default verb. Running it bare prints this list and stops.
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const questionsDir = join(here, "..", "questions");
+const [verb, noun, ...rest] = process.argv.slice(2);
+const flags = new Set([noun, ...rest].filter((a) => typeof a === "string" && a.startsWith("--")));
+
+let code = 0;
+if (verb === "init") {
+  const { init } = await import("../lib/init.mjs");
+  code = await init({ questionsDir, again: flags.has("--again") });
+} else if (verb === "add" && noun === "phone") {
+  const { addPhone } = await import("../lib/phone.mjs");
+  code = await addPhone({ dryRun: flags.has("--dry-run") });
+} else if (verb === "doctor") {
+  const { doctor } = await import("../lib/doctor.mjs");
+  code = doctor({ questionsDir });
+} else {
+  console.log(`lavelle: one command, three verbs.
+
+  lavelle init            ask the questions, write owner.md and lavelle.json
+  lavelle add phone       stand up the receptionist from those answers (add --dry-run to only show what it would do)
+  lavelle doctor          say what exists, what is missing, what could not be reached
+
+Files go in LAVELLE_HOME, or a folder named lavelle in the current directory.`);
+  code = verb ? 1 : 0;
+}
+process.exit(code);

@@ -1,0 +1,35 @@
+Northgate Appliance Service
+an appliance repair shop in a mid-size city
+the bank account, the tax filings, any customer record outside a booked job
+level
+yes, recorded, and the greeting says so
+offer a callback first; transfer only on a second explicit ask
+5550100
+Monday through Friday
+two windows, 8 to 12 and 12 to 4
+tomorrow or later
+yes, a flat trip fee
+the visit and the diagnosis
+yes, credited to the repair if they go ahead
+at the door when the work is done
+never; the trip fee is the only number the agent may say
+a list of city names the shop covers
+the owner only
+kitchen and laundry appliances
+none by brand
+residential only
+tell the caller to leave the house or shut off the supply and call the utility, then stop the booking
+skip
+skip
+skip
+skip
+skip
+skip
+skip
+yes
+
+
+
+
+
+skip
