@@ -32,6 +32,7 @@ If you answer differently: naming a time on behalf of a person who is under a si
 **82. How are numbers spoken?**
 Writes `comms.number_reading`. Default: ordinary numbers as words, structured identifiers read back digit by digit with grouping. Holds: prompt.
 If you answer differently: reading a postal code as a single number is how a wrong address gets confirmed by a customer who was not really listening.
+Incident: the worked example's agent read a saved street address back with the street type spoken as a title, because the lookup handed it the abbreviation exactly as the customer record stored it, and the caller had to correct it. A prompt rule cannot fix this; the model reads what it is given. The lookup now spells out street abbreviations before the voice sees them and leaves the stored record alone.
 
 **83. Are tracking and shipping notices sent by your automation, or by the platform?**
 Writes `comms.notification_source`. Default: through the storefront platform only. Holds: code.
