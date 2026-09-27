@@ -2,7 +2,7 @@
 
 *The first thing in these notes that runs. One command asks four questions for the owner file and then the shop questions from chapter 11, writes two files, and stands up the phone from the answers. Chapter 10's thirty questions are not in it yet. Everything before this chapter was a method. This is the method with a hand on it.*
 
-**Status: built 2026-09-26, run end to end with an invented shop and no network on the machine it was written on and on a second machine the same day (an Ubuntu server, node 18, a fresh folder), not yet run by a second person.** The command lives in `bin/lavelle` with its parts in `lib/`. The test in `test/run.sh` is the proof that exists: thirteen checks, passing on both machines. The half of the stranger test that matters is the person, not the machine: someone who did not build it, typing the two commands and writing down what broke. Until that has happened, "built" means "runs for the person who built it, in two places," which is only a little stronger than the weakest thing that word can mean.
+**Status: built 2026-09-26, run end to end with an invented shop and no network on the machine it was written on and on a second machine the same day (an Ubuntu server, node 18, a fresh folder), not yet run by a second person.** The command lives in `bin/lavelle` with its parts in `lib/`. The test in `test/run.sh` is the proof that exists: twenty checks, passing on both machines. The half of the stranger test that matters is the person, not the machine: someone who did not build it, typing the two commands and writing down what broke. Until that has happened, "built" means "runs for the person who built it, in two places," which is only a little stronger than the weakest thing that word can mean.
 
 ## What it is
 
@@ -66,8 +66,8 @@ Every question can be answered from a file: one line per answer, in the order as
 
 ## Starting yours
 
-1. Install node, version 18 or newer, from nodejs.org. Everything below is typed into the Terminal app, from inside the cloned folder.
-2. Type `bin/lavelle` with nothing after it. Read the list.
+1. Install node, version 18 or newer, from nodejs.org. Everything below is typed into the Terminal app on a Mac, or PowerShell on Windows, from inside the cloned folder.
+2. Type `bin/lavelle` with nothing after it. On Windows type `node bin\lavelle` instead, here and in every step below, because Windows does not read the first line of the file the way a Mac does. Read the list. Nobody has run this on Windows yet; if you are the first, what breaks is the finding.
 3. Type `bin/lavelle init`. It writes into a folder named `lavelle` inside the clone. Answer the seventeen honestly, including the ones where the honest answer is "we don't do that."
 4. Open `lavelle/owner.md` and `lavelle/lavelle.json` and read your answers as a caller would hear them.
 5. Type `bin/lavelle doctor`. Everything it can see should say ok except the kit and the key, and it will exit with a 1 because of those two.
