@@ -54,14 +54,15 @@ The worked example throughout is a real repair shop in Alabama and its public pa
 
 ## Related, and public
 
+- [lavelle-skills](https://github.com/lavelle-os/lavelle-skills), the rules behind the agents as skill files: eight skills, each tested against a model before it went public.
 - [vapi-voice-tuneup](https://github.com/morriss-group/vapi-voice-tuneup), the phone: the
   settings, the failures, and what a real line taught that no dashboard shows.
 
-## Built beside the notebook, held private
+## Built beside the notebook
 
-Three things the method produced that are not in this repository. Each is described from its own README on 2026-10-10, and each sits in a private repository behind the same gate this one uses, plus a read of every file by its author.
+Three things the method produced that are not in this repository. Each is described from its own README on 2026-10-10. The skills box is public; the other two sit in private repositories behind the same gate this one uses, plus a read of every file by its author.
 
-- **The skills box.** Seven skills, each one folder with one `SKILL.md` an agent reads: a receptionist that books on a real calendar, an honest tutor, a second-model brief with its reconciliation, resale identification from photos, the field ticket a customer reads, the eleven steps of a one-person home-service business, and license research from official sources only. Prose, not code: every skill tells the agent to draft and show, never to apply, and every rule carries the incident that produced it.
+- **The skills box**, public at [lavelle-os/lavelle-skills](https://github.com/lavelle-os/lavelle-skills) since 2026-10-11. Eight skills, each one folder with one `SKILL.md` an agent reads: a receptionist that books on a real calendar, an honest tutor, a second-model brief with its reconciliation, resale identification from photos, the field ticket a customer reads, the eleven steps of a one-person home-service business, license research from official sources only, and paralegal-grade legal research that never advises. Prose, not code: every skill tells the agent to draft and show, never to apply, and every rule carries the incident that produced it.
 - **The truck inventory.** A phone app that tracks which parts are on each service truck: scan a barcode to count a part in, out against a job, or by hand; the owner adds trucks, techs and parts and moves stock; every action is a permanent history entry, and a wrong count is fixed by a new entry, not an edit. It does not price, does not order, and does not answer the phone. Its first real job, 2026-10-01, ended with a dead page on the owner's phone; a test now runs the page's own script.
 - **A bike shop.** The second industry: one assistant answers a shop's phone and its counter iPad from the same tools, over a multi-brand catalog with a source on every field, a test-mode register, each customer's bikes and jobs, and a booking engine that does not promise a build before the parts can arrive. It charges nothing and dials nobody by default. Agents built it under the owner's direction; no shop runs it.
 
