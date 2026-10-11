@@ -67,7 +67,7 @@ Every question can be answered from a file: one line per answer, in the order as
 ## Starting yours
 
 1. Install node, version 18 or newer, from nodejs.org. Everything below is typed into the Terminal app on a Mac, or PowerShell on Windows, from inside the cloned folder.
-2. Type `bin/lavelle` with nothing after it. On Windows type `node bin\lavelle` instead, here and in every step below, because Windows does not read the first line of the file the way a Mac does. Read the list. Nobody has run this on Windows yet; if you are the first, what breaks is the finding.
+2. Type `bin/lavelle` with nothing after it. On Windows type `node bin\lavelle` instead, here and in every step below, because Windows does not read the first line of the file the way a Mac does. Read the list. Nobody has run this on real Windows yet. On 2026-10-11 a Windows-style checkout, with Windows line endings, was simulated on a Mac: the three commands worked and wrote clean files, and `npm test` broke until a `.gitattributes` file forced Unix line endings on checkout, which the repository carries. Still unverified on real Windows: the console encoding, `readline` in PowerShell, and the global-install shim. `npm test` needs a bash, and Git for Windows ships one as Git Bash. If you are the first, what breaks is the finding.
 3. Type `bin/lavelle init`. It writes into a folder named `lavelle` inside the clone. Answer the seventeen honestly, including the ones where the honest answer is "we don't do that."
 4. Open `lavelle/owner.md` and `lavelle/lavelle.json` and read your answers as a caller would hear them.
 5. Type `bin/lavelle doctor`. Everything it can see should say ok except the kit and the key, and it will exit with a 1 because of those two.
