@@ -10,7 +10,7 @@ These notes are written by a real person about a real business, on purpose. This
 - The repair shop's trading name, where a chapter needs it to make an example concrete.
   The transcriber dictionary is the main place, because an agent that mishears the shop's
   own name is the first thing a reader will hit.
-- The public repositories under morriss-group, and this one.
+- The public repositories under morriss-group and lavelle-os, and this one.
 - The hardware in the rig, the tools and vendors used, and measured numbers about the system itself: token counts, latencies, costs per call, rank counts, watts.
 - Incidents that happened to the system, including the ones that embarrass the author.
 
