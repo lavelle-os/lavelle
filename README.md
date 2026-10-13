@@ -38,7 +38,7 @@ I've run it on two machines. Nobody else has yet. On Windows, type `node bin\lav
 
 ## Also public
 
-- [lavelle-skills](https://github.com/lavelle-os/lavelle-skills): the rules as eight skill files any coding agent can read, tested under Claude Code and OpenCode.
+- [lavelle-skills](https://github.com/lavelle-os/lavelle-skills): the rules as seventeen skill files any coding agent can read. The first eight were tested under Claude Code and OpenCode, the newer nine under Claude only.
 - [vapi-voice-tuneup](https://github.com/morriss-group/vapi-voice-tuneup): the phone's settings and what a live line taught.
 
 The truck app and the bike shop are private.
