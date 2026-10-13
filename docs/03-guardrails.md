@@ -32,6 +32,8 @@ This used to be listed as a guardrail. An outside reviewer broke the regex in te
 
 **What went wrong:** a `git add -A` on a public repo swept in files that named the business. Caught and removed one commit later, but the history has it. The warning that used to print became a block, and the block became a checklist.
 
+**What went wrong, 2026-10-12:** the history scan read file contents only, so it reported the skills box clean across its full history while every commit's author line carried a machine name and local username, and the notebook's first commits carried the business email. An outside reviewer caught it the day after the flip, not the tool. The cause was one empty setting: the machine had no default commit email, so every repository without its own fell back to the user at the machine's name. One global setting fixed it, and the scan now reads author lines and commit messages. The old lines stay in history under a written exception in the publication policy.
+
 ## 4. Second-model verification for anything legal, tax, or licensing
 
 A finding about law, tax, or licensing is not acted on until a second, independent model has re-derived it from primary sources. The two answers are reconciled in writing, and the differences are listed.

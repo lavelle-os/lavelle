@@ -37,6 +37,8 @@ This is a hard boundary, the same as customer data. It applies to the chapters, 
 3. Before any repository flips public: a scan of the entire history, and a read of every file by the author.
 4. Anything in the "Out" list found after publication is removed from history, not just from the tip, and the incident is added to the guardrails chapter.
 
+   **Exception, ruled by the owner on 2026-10-12:** the author and committer lines of the first public commits carry the shop's business email and a machine name with a local username, and one commit message from 2026-10-10 says when two private projects might be published. They stay in history. A rewrite was weighed and declined: the host keeps force-pushed commits reachable by their hash, so a rewrite removes less than it appears to, and the email is the business's own address. Since 2026-10-12 every commit is signed with the host's no-reply address, set once on the author's machine, and the history scan reads author lines and commit messages as well as files. Anything else on the Out list found after publication is still removed from history; this exception covers only those lines. The incident is in the guardrails chapter, rule 3.
+
 ## What a scanner can't do
 
 A scanner catches tokens and phone numbers. It does not know that a hardware list plus a store name plus a neighborhood name is a join key. That judgment is the author's, and this file is where it's written down.
