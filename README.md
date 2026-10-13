@@ -1,85 +1,50 @@
 # Lavelle
 
-**Field notes from one small business that runs on AI agents. Unsupported. Chapters last verified end to end 2026-09-05; anything dated later in a chapter was added since and has not had that pass.**
+Lavelle is an operating system for a business, not for a computer. A CRM gives you the screens its company decided you get. This is the other way: the rules, files and habits that let one owner have AI agents build the tools his business needs. I run a one-truck appliance repair shop in Alabama, I'm not a programmer, and in four months this method built my phone receptionist, my parts store's order tracking, a truck inventory app, and a bike shop's register and customer list.
 
-**Status: actively maintained by one person, as of 2026-10-12.** These notes track a system that is
-still being built, by the person running it, between service calls. Chapters carry their own status
-lines, "in use", "design only, not built", "design, partly practiced", and those are load-bearing,
-not decoration. If the last commit here is more than six months old, assume it went unmaintained and
-check anything security-shaped against a current source before you rely on it.
+The idea is DHH's: we all use a different five percent of the software we're given, so build your own five percent (Lex Fridman #501, 25:21). These notes are my shop's five percent, with every rule next to the thing that went wrong before it.
 
-**Read this first:** unattended agents with live credentials can spend money, leak data, and break production. These notes describe how one shop keeps that from happening. They are not a product, not advice, and not a promise that it will work for you. Nobody runs your fleet but you.
+## Read this before you connect anything
 
-**What these notes are NOT, said plainly because a disclaimer nobody can find is decoration:**
+AI agents with real passwords can spend money, leak customer data and break things that were working. These notes are how my shop keeps that from happening. They are not a product, not advice, and not a promise it works for you. Don't connect a live account to anything here until the server it talks to is locked down (Layer 4.5 in the phone kit's deploy guide). Anything about law, tax or licenses goes to a second AI and then a real professional before you act. It's written for one owner; a second person with access walks around most of these gates. I keep it up between service calls, chapters were last checked end to end on 2026-09-05, and it comes as is.
 
-- **Not a security product.** The chapter called "Security posture" is one shop's account of holes it found and what it did about them, with the still-open ones marked open. It is not a control set, not an audit, and not a thing you can adopt and call yourself covered.
-- **Not legal, tax, or professional advice.** Where these notes touch law, licensing, employment or money, the rule in them is to stop and get a second model and a human professional. Do the same.
-- **Do not connect production credentials to anything here until you have done Layer 4.5 of the deploy guide in the linked phone repository, or its equivalent for whatever you are wiring up.** An unprotected endpoint is harmless the day it returns an example and expensive the day it reaches your calendar.
-- **Written for one owner with one set of hands.** Every gate in here assumes a single person whose judgement is the last word. A second human with push access or a shared subscription walks around most of it, and nothing here tells you how to handle that.
-- **AS IS, with no duty to update.** See the licence. Nobody here is obliged to fix, maintain, or warn you when something in these notes stops being true.
+## Start with one file
 
-## Start here, one sentence
+Before any agent touches a live account, give it one file to read first that says three things: who it works for, what it may never touch, and how the owner is doing today. Mine is a `CLAUDE.md` at the top of every project. The chapters below are what I wrote into it.
 
-Make one file your agents read before anything else, put three things in it, who they work for, what they may never touch, and how the owner is doing today, and give no agent a live credential until that file exists.
+## Try the setup command
 
-That is the method at its smallest, and it is the ride-along before the keys. The rest of these notes are what one shop wrote into that file and what went wrong on the way. Each of the three things has a chapter: who they work for is [the operator profile](docs/08-operator-profile.md), what they may never touch is [the guardrails](docs/03-guardrails.md), and how the owner is doing today is [the owner-state gate](docs/01-owner-state-gate.md). Status in this shop: the file is in use, as a `CLAUDE.md` at the top of every project since August 2026; the operator profile chapter that would turn it into a form is design only, not built.
+You need Node 18 or newer and a terminal.
 
-## What this is
+1. `bin/lavelle init` asks your shop's questions and writes two files, `owner.md` and `lavelle.json`.
+2. `bin/lavelle add phone --dry-run` shows what it would send and changes nothing.
+3. `bin/lavelle add phone` stands up a receptionist through the [phone kit](https://github.com/morriss-group/vapi-voice-tuneup), and refuses until every required answer is in. Make a test call before a real caller does.
 
-The rules, the guardrails, the file structure, and the hardware recipe one person uses to run a trade business, a parts store, and a video channel on agents that work while they don't. Written by an appliance repairman who is not a programmer. Every rule is tied to the incident that caused it, and the incident is written next to the rule.
+I've run it on two machines. Nobody else has yet. On Windows, type `node bin\lavelle`; nobody has tried that on a real Windows machine.
 
-The shape of it comes from one observation: everyone uses a different five percent of the software they're given, so build your own five percent (DHH, Lex Fridman #501, about 25:21). These notes are one shop's five percent, learned by conversation and written down.
+## The chapters
 
-The worked example throughout is a real repair shop in Alabama and its public parts store, TheMrFixedIt, by choice. See [the public-identity policy](PUBLIC-IDENTITY.md) for what is in these notes on purpose and what will never be.
+- [The owner-state gate](docs/01-owner-state-gate.md): what the agents may decide depending on how I'm doing today. In use.
+- [Mission Control](docs/02-mission-control.md): five files that keep every project straight. In use.
+- [Guardrails](docs/03-guardrails.md): eleven rules, each with what went wrong. In use.
+- [Loops and usage](docs/04-loops-and-usage.md): scheduled agents sharing one subscription. In use.
+- [The rig](docs/05-rig-recipe.md): an old PC as an always-on worker with a local model. In use.
+- [Security posture](docs/06-security-posture.md): the walls, the kill switches, and an outside review's holes, open and closed.
+- [Decision ledger](docs/07-decision-ledger.md), [earning trust](docs/07-earning-trust.md), [operator profile](docs/08-operator-profile.md), [setup conversation](docs/10-setup-conversation.md): designed, not built.
+- [Threat model](docs/09-threat-model.md) and [breach surfaces](docs/09-breach-surfaces.md): designed, partly practiced.
+- [The shop questions](docs/11-shop-questions.md): 113 questions that set what the business promises a customer; the setup command reads them.
+- [Install](docs/12-install.md): the setup command above, step by step.
+- [Dictionary](docs/dictionary.md): the words voice dictation gets wrong.
 
-## What's in the box
+## Also public
 
-| Chapter | What it is |
-|---|---|
-| [The owner-state gate](docs/01-owner-state-gate.md) | Decisions tiered by how the owner is doing today. Level: full authority. Elevated or after dark: capture only. Low: nothing asked. Where it came from, and where it fails. |
-| [Mission Control](docs/02-mission-control.md) | Five files that coordinate every project and run nothing. A record-keeping discipline, not a safety mechanism. |
-| [Guardrails](docs/03-guardrails.md) | Eleven rules, each with the thing that went wrong. |
-| [Loops and usage](docs/04-loops-and-usage.md) | How a few scheduled agents share one subscription and one owner. |
-| [The rig](docs/05-rig-recipe.md) | An old PC as an always-on worker with a local model: what it's good for, and where its quality falls off a cliff. |
-| [Security posture](docs/06-security-posture.md) | The four walls, kill switches, detection, and an outside review of this exact setup, with each hole it found marked open or closed. |
-| [The decision ledger](docs/07-decision-ledger.md) | Design only, not built. What the system writes down every time the owner decides something: the words, the fields, endorsed versus observed, the disagreement ritual, and where the file lives. |
-| [Earning trust](docs/07-earning-trust.md) | Design only, not built. What the record is used for: three tiers, the score a job has to meet, promotion only at a sitting, demotion on a trigger, and the endorsed-policy model. |
-| [The operator profile](docs/08-operator-profile.md) | Design only, not built. The folder that tells the agents who they work for: field classes, the never list, the three protections as required fields, the household halt, and who owns it. |
-| [The threat model](docs/09-threat-model.md) | Design, partly practiced. What the system actually holds and who would want it: the words, the assets ranked by what losing them costs, and the actors. |
-| [Breach surfaces](docs/09-breach-surfaces.md) | Design, partly practiced. Where an attacker gets in and what it costs: the boundary on each surface, what a stolen profile enables in detail, the second-user line, and how this fails. |
-| [The setup conversation](docs/10-setup-conversation.md) | Design only, not built. Thirty questions, in order, that build the operator profile as a conversation, with the never list enforced while they're asked. |
-| [The shop questions](docs/11-shop-questions.md) | Design, read by code since 2026-09-26 (chapter 12). The second setup conversation: 113 questions that configure what the business promises a customer, seventeen of them blocking, and each tagged for whether it holds in code or in a prompt (96 to 16), with the bank in [questions/](questions/) and the ones this trade never had to answer in [questions/unanswered.md](questions/unanswered.md). |
-| [Install](docs/12-install.md) | Built, not yet run by a stranger. One command: `init` asks the questions and writes the owner file, `add phone` stands up the receptionist from the answers, `doctor` reports. |
-| [Dictionary](docs/dictionary.md) | In use. The names and terms dictation gets wrong, with the right spelling, for any transcript-cleaning step. |
+- [lavelle-skills](https://github.com/lavelle-os/lavelle-skills): the rules as eight skill files any coding agent can read, tested under Claude Code and OpenCode.
+- [vapi-voice-tuneup](https://github.com/morriss-group/vapi-voice-tuneup): the phone's settings and what a live line taught.
 
-## Related, and public
+The truck app and the bike shop are private.
 
-- [lavelle-skills](https://github.com/lavelle-os/lavelle-skills), the rules behind the agents as skill files: eight skills, each tested against a model before it went public.
-- [vapi-voice-tuneup](https://github.com/morriss-group/vapi-voice-tuneup), the phone: the
-  settings, the failures, and what a real line taught that no dashboard shows.
+## What's in here and what never is
 
-## Built beside the notebook
+My shop and its public parts store, TheMrFixedIt, are the worked example on purpose. Customer names, numbers and addresses never are. [PUBLIC-IDENTITY.md](PUBLIC-IDENTITY.md) has the full line.
 
-Three things the method produced that are not in this repository. Each was described from its own README on 2026-10-10; the skills line was updated 2026-10-12. The skills box is public; the other two sit in private repositories behind the same gate this one uses, plus a read of every file by its author.
-
-- **The skills box**, public at [lavelle-os/lavelle-skills](https://github.com/lavelle-os/lavelle-skills) since 2026-10-11. Eight skills, each one folder with one `SKILL.md` an agent reads: a receptionist that books on a real calendar, an honest tutor, a second-model brief with its reconciliation, resale identification from photos, the field ticket a customer reads, the eleven steps of a one-person home-service business, license research from official sources only, and first-pass legal research that never advises. Prose, not code: every skill tells the agent to draft and show, never to apply, and most rules carry the incident that produced them.
-- **The truck inventory.** A phone app that tracks which parts are on each service truck: scan a barcode to count a part in, out against a job, or by hand; the owner adds trucks, techs and parts and moves stock; every action is a permanent history entry, and a wrong count is fixed by a new entry, not an edit. It does not price, does not order, and does not answer the phone. Its first real job, 2026-10-01, ended with a dead page on the owner's phone; a test now runs the page's own script.
-- **A bike shop.** One assistant answers a shop's phone and its counter iPad from the same tools, over a multi-brand catalog with a source on every field, a test-mode register, each customer's bikes and jobs, and a booking engine that does not promise a build before the parts can arrive. It charges nothing and dials nobody by default. Agents built it under the owner's direction; no shop runs it.
-
-## What this is not
-
-- Not an operating system. That word was used in early drafts and it's a promise these notes can't keep.
-- Not a finished installer. One command runs (chapter 12): it asks the shop questions, writes the owner file, and stands up the phone from the answers. It has been run by its author on two machines and by nobody else. Everything else is recipes you can read, in the order they were done, with the failure points marked.
-- Not private-by-architecture. The local model keeps one workload in the house. The business itself talks to a phone service, a video platform, a store, suppliers, and a git host.
-- Not maintained on a schedule. Budget for it is a few hours a month when quiet and more when not; if the last-verified date above is old, assume drift.
-
-## What this is, and is not
-
-Notes first, then one command. Two things here run: a shell script that checks a commit for
-identifiers before it leaves your machine, and `bin/lavelle`, which asks the shop questions and
-stands up the phone (chapter 12, built 2026-09-26, not yet run by a stranger). Everything else is
-meant to be read, argued with, and adapted by hand. A recipe you can read beats a script you can't.
-
-## License
-
-MIT. Copyright The Morriss Group LLC. Provided as is, without warranty of any kind. No support relationship is created by cloning, forking, or following these notes.
+MIT licensed. Copyright The Morriss Group LLC.
