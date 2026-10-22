@@ -2,6 +2,45 @@
 
 Lavelle is an operating system for a business, not for a computer. A CRM gives you the screens its company decided you get. This is the other way: the rules, files and habits that let one owner have AI agents build the tools his business needs. I run a one-truck appliance repair shop in Alabama, I'm not a programmer, and in four months this method built my phone receptionist, my parts store's order tracking, a truck inventory app, and a bike shop's register and customer list.
 
+## If you have never used GitHub, start here
+
+GitHub is a website that stores files. The text you are reading is one of them, called README. You don't need an account to read anything here, and clicking can't break anything. You can ignore every button I don't name below.
+
+My work is in two places:
+
+- **Here (lavelle):** the field notes, which are chapters on how my shop runs AI agents safely.
+- **[lavelle-skills](https://github.com/lavelle-os/lavelle-skills):** pages you copy into ChatGPT, Claude or another chat app. If that's what you came for, go there. Its page starts with the same kind of help.
+
+### Read the field notes (no account)
+
+1. Scroll down to [The chapters](#the-chapters) and click the first one, **The owner-state gate**. It opens as a normal page.
+2. Above the chapter is a switch with three words: **Preview**, **Code**, **Blame**. Leave it on **Preview**. The other two show the raw text and its history.
+3. To come back, use your browser's back button, or click **lavelle** at the top left of the page (not **lavelle-os**).
+
+The same chapters are in the folder named **docs**, numbered in reading order. You can skip the other folders.
+
+### Skip the setup command unless you use a terminal
+
+The part called "Try the setup command" below needs a terminal (the text window programmers type commands into) and a program called Node. You don't need either one to read the chapters or use the skills.
+
+### Get everything onto your computer (optional, not for phones)
+
+1. Go to the first page of this repository: https://github.com/lavelle-os/lavelle
+2. Above the list of folders, on the right, click the green **Code** button. Not the **Code** tab at the top left.
+3. A box headed **Clone** opens. Ignore everything in it except the last line, **Download ZIP**, and click that.
+4. A file named `lavelle-main.zip` goes into your Downloads folder. On a Mac, double-click it. On Windows, right-click it, then click **Extract All**.
+5. The chapters are in the `docs` folder. They open in Notepad or TextEdit as plain text with # and * marks, and they read better here on GitHub.
+
+### Tell me what broke (needs a free GitHub account)
+
+1. Click **Issues** at the top of the page, next to **Code**.
+2. The page will say "No results matched your search." That only means nobody has written one yet.
+3. Click the green **New issue** button on the right.
+4. If you aren't signed in, GitHub shows "Sign in to GitHub" instead of a form. Click **Create an account** (under "New to GitHub?") and follow GitHub's steps. Then come back to **Issues** and click **New issue** again.
+5. Type a short title, write what you did and what happened in the big box, and click the green button to post it.
+
+Everything you post there is public, with your GitHub name on it. Leave out customer names, phone numbers and addresses.
+
 The idea is DHH's: we all use a different five percent of the software we're given, so build your own five percent (Lex Fridman #501, 25:21). These notes are my shop's five percent, with every rule next to the thing that went wrong before it.
 
 ## Read this before you connect anything
@@ -18,7 +57,7 @@ You need Node 18 or newer and a terminal.
 
 1. `bin/lavelle init` asks your shop's questions and writes two files, `owner.md` and `lavelle.json`.
 2. `bin/lavelle add phone --dry-run` shows what it would send and changes nothing.
-3. `bin/lavelle add phone` stands up a receptionist through the [phone kit](https://github.com/morriss-group/vapi-voice-tuneup), and refuses until every required answer is in. Make a test call before a real caller does.
+3. `bin/lavelle add phone` stands up a receptionist through the [phone kit](https://github.com/morriss-group/vapi-voice-tuneup) (on my company's other GitHub account), and refuses until every required answer is in. Make a test call before a real caller does.
 
 I've run it on two machines. Nobody else has yet. On Windows, type `node bin\lavelle`; nobody has tried that on a real Windows machine.
 
@@ -38,8 +77,8 @@ I've run it on two machines. Nobody else has yet. On Windows, type `node bin\lav
 
 ## Also public
 
-- [lavelle-skills](https://github.com/lavelle-os/lavelle-skills): the rules as seventeen skill files any coding agent can read. The first eight were tested under Claude Code and OpenCode, the newer nine under Claude only.
-- [vapi-voice-tuneup](https://github.com/morriss-group/vapi-voice-tuneup): the phone's settings and what a live line taught.
+- [lavelle-skills](https://github.com/lavelle-os/lavelle-skills): the rules as eighteen skill files any coding agent can read. The first eight were tested under Claude Code and OpenCode, the newer ten under Claude only.
+- [vapi-voice-tuneup](https://github.com/morriss-group/vapi-voice-tuneup) (on my company's other GitHub account): the phone's settings and what a live line taught.
 
 The truck app and the bike shop are private.
 
