@@ -73,6 +73,7 @@ I've run it on two machines. Nobody else has yet. On Windows, type `node bin\lav
 - [Threat model](docs/09-threat-model.md) and [breach surfaces](docs/09-breach-surfaces.md): designed, partly practiced.
 - [The shop questions](docs/11-shop-questions.md): 113 questions that set what the business promises a customer; the setup command reads them.
 - [Install](docs/12-install.md): the setup command above, step by step.
+- [Where the agents live](docs/13-where-the-agents-live.md): two programs on one host, the rules each breakage left, and the week the host was breached. In use.
 - [Dictionary](docs/dictionary.md): the words voice dictation gets wrong.
 
 ## Also public
