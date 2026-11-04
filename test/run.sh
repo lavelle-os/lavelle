@@ -95,6 +95,13 @@ cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"; rm -f "$kit/received.jso
 echo "// changed after checkout" >> "$kit/setup.mjs"
 if printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin3.out 2>&1; then bad "kit with a changed file was NOT refused"; else ok "kit with a changed file refused"; fi
 [ ! -f "$kit/received.json" ] && ok "nothing in the changed kit ran" || bad "the changed kit ran"
+git -C "$kit" checkout -q -- setup.mjs; cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+echo "// planted" > "$kit/planted.mjs"
+if printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin4.out 2>&1; then bad "kit with an added file was NOT refused"; else ok "kit with an added file refused"; fi
+[ ! -f "$kit/received.json" ] && ok "nothing in the kit with an added file ran" || bad "the kit with an added file ran"
+rm -f "$kit/planted.mjs"; cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin5.out 2>&1; cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+[ -f "$kit/received.json" ] && printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin6.out 2>&1 && ok "a second install runs: the kit's own ignored output is not an added file" || bad "the second install was refused (see /tmp/lavelle-pin6.out)"
 cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
 unset VAPI_API_KEY LAVELLE_TEST_SECRET
 
