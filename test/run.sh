@@ -67,12 +67,47 @@ if printf '5550199\n1\n' | bin/lavelle add phone --dry-run > /tmp/lavelle-rec.ou
 grep -q 'begins with yes' /tmp/lavelle-rec.out && ok "recording refusal says why" || bad "recording refusal reason missing"
 cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
 
-echo "== lavelle add phone, the real install step, against a fake kit that only records what it was given"
+echo "== the voice kit is pinned to one commit, and the installer gets only the key and PATH"
+pin=$(sed -n 's/^const KIT_COMMIT = "\([0-9a-f]\{40\}\)";$/\1/p' lib/phone.mjs)
+[ -n "$pin" ] && ok "lib/phone.mjs names one full commit for the kit" || bad "KIT_COMMIT is missing or not a full commit"
+grep -q "checkout --detach $pin" /tmp/lavelle-phone.out && ok "dry run's clone lines land on the pinned commit" || bad "dry run's clone lines do not check out the pin"
+# A fake kit that records what it was given. It cannot be at the real pinned commit, so the first run
+# proves the refusal, and the second runs a copy of the command whose pin is rewritten to the fake's commit.
 kit="$(mktemp -d)/kit"; cp -R test/fake-kit "$kit"
+git -C "$kit" init -q && git -C "$kit" add . && git -C "$kit" -c user.name=test -c user.email=test@example.com -c commit.gpgsign=false commit -qm "fake kit"
 # Set with read, not NAME then an equals sign: the publish gate blocks that shape, rightly.
 read -r VAPI_API_KEY <<< "invented-not-a-key"; export VAPI_API_KEY
+read -r LAVELLE_TEST_SECRET <<< "must-not-reach-the-kit"; export LAVELLE_TEST_SECRET
 cp "$LAVELLE_HOME/lavelle.json" /tmp/lavelle-keep.json
-printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" bin/lavelle add phone > /tmp/lavelle-live.out 2>&1 && ok "live run against the fake kit exited 0" || bad "live run exited non-zero (see /tmp/lavelle-live.out)"
+if printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" bin/lavelle add phone > /tmp/lavelle-pin.out 2>&1; then bad "kit at the wrong commit was NOT refused"; else ok "kit at the wrong commit refused"; fi
+grep -q 'is not the pinned one' /tmp/lavelle-pin.out && [ ! -f "$kit/received.json" ] && ok "refusal says why, and nothing in the kit ran" || bad "wrong-commit refusal reason missing or the kit ran"
+[ "$(sum)" = "$before" ] && ok "wrong-commit refusal wrote nothing" || bad "wrong-commit refusal modified the install folder"
+pinned="$(mktemp -d)/lavelle"; mkdir -p "$pinned"; cp -R bin lib questions package.json "$pinned/"
+node -e "
+const fs=require('fs');const p=process.argv[1]+'/lib/phone.mjs';
+fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace(process.argv[2],process.argv[3]));" "$pinned" "$pin" "$(git -C "$kit" rev-parse HEAD)"
+printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin2.out 2>&1 && ok "kit at the pinned commit ran" || bad "kit at the pinned commit did not run (see /tmp/lavelle-pin2.out)"
+node -e "
+const env=JSON.parse(require('fs').readFileSync(process.argv[1]+'/received.json','utf8')).env;
+if(!env.includes('VAPI_API_KEY')||!env.includes('PATH'))process.exit(1);
+if(env.includes('LAVELLE_TEST_SECRET')||env.includes('LAVELLE_HOME'))process.exit(2);" "$kit" && ok "installer saw VAPI_API_KEY and PATH, not a variable from the parent shell" || bad "installer environment wrong (exit $?)"
+cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"; rm -f "$kit/received.json"
+echo "// changed after checkout" >> "$kit/setup.mjs"
+if printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin3.out 2>&1; then bad "kit with a changed file was NOT refused"; else ok "kit with a changed file refused"; fi
+[ ! -f "$kit/received.json" ] && ok "nothing in the changed kit ran" || bad "the changed kit ran"
+git -C "$kit" checkout -q -- setup.mjs; cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+echo "// planted" > "$kit/planted.mjs"
+if printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin4.out 2>&1; then bad "kit with an added file was NOT refused"; else ok "kit with an added file refused"; fi
+[ ! -f "$kit/received.json" ] && ok "nothing in the kit with an added file ran" || bad "the kit with an added file ran"
+rm -f "$kit/planted.mjs"; cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin5.out 2>&1; cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+[ -f "$kit/received.json" ] && printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin6.out 2>&1 && ok "a second install runs: the kit's own ignored output is not an added file" || bad "the second install was refused (see /tmp/lavelle-pin6.out)"
+cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+
+echo "== lavelle add phone, the real install step, against a fake kit that only records what it was given"
+# The same fake kit and the copy of the command pinned to it, from the pin checks above.
+rm -f "$kit/received.json"
+printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-live.out 2>&1 && ok "live run against the fake kit exited 0" || bad "live run exited non-zero (see /tmp/lavelle-live.out)"
 node -e "
 const got=JSON.parse(require('fs').readFileSync(process.argv[1]+'/received.json','utf8')).lines;
 const want=['Northgate Appliance Service','an appliance repair shop in a mid-size city','a list of city names the shop covers','2','','skip','skip','',''];
@@ -85,7 +120,7 @@ node -e "
 const p=process.env.LAVELLE_HOME+'/lavelle.json';const fs=require('fs');const d=JSON.parse(fs.readFileSync(p,'utf8'));
 d.owner.works_for='Northgate\nAppliance Service'; fs.writeFileSync(p,JSON.stringify(d,null,2));"
 broke=$(sum)
-if printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" bin/lavelle add phone > /tmp/lavelle-break.out 2>&1; then bad "line break in an answer was NOT refused"; else ok "line break in an answer refused"; fi
+if printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-break.out 2>&1; then bad "line break in an answer was NOT refused"; else ok "line break in an answer refused"; fi
 grep -q 'answer for owner.works_for has a line break' /tmp/lavelle-break.out && ok "refusal names the field" || bad "refusal does not name the field"
 [ ! -f "$kit/received.json" ] && [ "$(sum)" = "$broke" ] && ok "refusal ran nothing and wrote nothing" || bad "the kit ran or the install folder changed"
 cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
@@ -95,7 +130,8 @@ d.fields['voice.pronunciations'].answer='Beko\rBosch'; fs.writeFileSync(p,JSON.s
 if printf '5550199\n2\n' | bin/lavelle add phone --dry-run > /tmp/lavelle-break2.out 2>&1; then bad "carriage return in an answer was NOT refused"; else ok "carriage return refused, in the dry run too"; fi
 grep -q 'answer for voice.pronunciations has a line break' /tmp/lavelle-break2.out && ok "carriage-return refusal names the field" || bad "carriage-return refusal does not name the field"
 cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
-unset VAPI_API_KEY
+unset VAPI_API_KEY LAVELLE_TEST_SECRET
+
 
 echo "== unreadable lavelle.json reports, does not throw"
 echo '{not json' > "$LAVELLE_HOME/lavelle.json"
