@@ -106,7 +106,47 @@ rm -f "$kit/planted.mjs"; cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
 printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin5.out 2>&1; cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
 [ -f "$kit/received.json" ] && printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-pin6.out 2>&1 && ok "a second install runs: the kit's own ignored output is not an added file" || bad "the second install was refused (see /tmp/lavelle-pin6.out)"
 cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+
+echo "== lavelle add phone, the real install step, against a fake kit that only records what it was given"
+# The same fake kit and the copy of the command pinned to it, from the pin checks above.
+rm -f "$kit/received.json"
+printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-live.out 2>&1 && ok "live run against the fake kit exited 0" || bad "live run exited non-zero (see /tmp/lavelle-live.out)"
+node -e "
+const got=JSON.parse(require('fs').readFileSync(process.argv[1]+'/received.json','utf8')).lines;
+const want=['Northgate Appliance Service','an appliance repair shop in a mid-size city','a list of city names the shop covers','2','','skip','skip','',''];
+if(JSON.stringify(got)!==JSON.stringify(want)){console.log('got',JSON.stringify(got));process.exit(1)}" "$kit" && ok "kit received all eight answers, in order, and nothing else" || bad "kit received the wrong answers (exit $?)"
+grep -q '"agent_number": "5550199"' "$LAVELLE_HOME/lavelle.json" && ok "live run recorded the phone module answers" || bad "phone module answers not recorded"
+cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"; rm -f "$kit/received.json"
+
+echo "== line-break refusal: an answer with a line break in it never reaches the kit"
+node -e "
+const p=process.env.LAVELLE_HOME+'/lavelle.json';const fs=require('fs');const d=JSON.parse(fs.readFileSync(p,'utf8'));
+d.owner.works_for='Northgate\nAppliance Service'; fs.writeFileSync(p,JSON.stringify(d,null,2));"
+broke=$(sum)
+if printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" "$pinned/bin/lavelle" add phone > /tmp/lavelle-break.out 2>&1; then bad "line break in an answer was NOT refused"; else ok "line break in an answer refused"; fi
+grep -q 'answer for owner.works_for has a line break' /tmp/lavelle-break.out && ok "refusal names the field" || bad "refusal does not name the field"
+[ ! -f "$kit/received.json" ] && [ "$(sum)" = "$broke" ] && ok "refusal ran nothing and wrote nothing" || bad "the kit ran or the install folder changed"
+cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+node -e "
+const p=process.env.LAVELLE_HOME+'/lavelle.json';const fs=require('fs');const d=JSON.parse(fs.readFileSync(p,'utf8'));
+d.fields['voice.pronunciations'].answer='Beko\rBosch'; fs.writeFileSync(p,JSON.stringify(d,null,2));"
+if printf '5550199\n2\n' | bin/lavelle add phone --dry-run > /tmp/lavelle-break2.out 2>&1; then bad "carriage return in an answer was NOT refused"; else ok "carriage return refused, in the dry run too"; fi
+grep -q 'answer for voice.pronunciations has a line break' /tmp/lavelle-break2.out && ok "carriage-return refusal names the field" || bad "carriage-return refusal does not name the field"
+cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+# The other three of the five answers sent to the kit, one at a time, in the dry run.
+for field in owner.trade area.definition phone_module.goal; do
+  FIELD="$field" node -e "
+const p=process.env.LAVELLE_HOME+'/lavelle.json';const fs=require('fs');const d=JSON.parse(fs.readFileSync(p,'utf8'));
+const f=process.env.FIELD;
+if(f==='owner.trade')d.owner.trade='appliance\nrepair';
+if(f==='area.definition')d.fields['area.definition'].answer='Northgate\nand Eastfield';
+if(f==='phone_module.goal')d.phone_module=Object.assign(d.phone_module||{},{goal:'1\n2'});
+fs.writeFileSync(p,JSON.stringify(d,null,2));"
+  if printf '5550199\n2\n' | bin/lavelle add phone --dry-run > /tmp/lavelle-break3.out 2>&1; then bad "line break in $field was NOT refused"; else grep -q "answer for $field has a line break" /tmp/lavelle-break3.out && ok "line break in $field refused, naming the field" || bad "refusal for $field does not name it"; fi
+  cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+done
 unset VAPI_API_KEY LAVELLE_TEST_SECRET
+
 
 echo "== unreadable lavelle.json reports, does not throw"
 echo '{not json' > "$LAVELLE_HOME/lavelle.json"
