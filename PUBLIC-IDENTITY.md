@@ -28,11 +28,11 @@ These notes are written by a real person about a real business, on purpose. This
 
 Ruled by the owner on 2026-09-06. The public repository is a snapshot of practice, not a roadmap. It holds everything a reader needs to run the system today: the files, the rules, the guardrails, the recipes, the worked example, the setup questions. It holds nothing about where the project is headed: no end goals, no design directions beyond what is built or drafted as a design, no captured ideas, no outside reviews of the vision, no long-horizon plans. A chapter may say "design only, not built." It may not say what the design is for beyond the job in front of it.
 
-This is a hard boundary, the same as customer data. It applies to the chapters, the README, replies to issues, and what is said to anyone asking about the project. The commit gate blocks a short list of roadmap words in chapters and the README; the list is a tripwire, not the rule. The rule is this paragraph.
+This is a hard boundary, the same as customer data. It applies to the chapters, the README, replies to issues, and what is said to anyone asking about the project. The commit gate blocks a short list of roadmap words in every file but this one; the list is a tripwire, not the rule. The rule is this paragraph.
 
 ## How it's enforced
 
-1. A secrets scanner runs before every commit (`scripts/gate.sh` runs gitleaks when installed, and a regex fallback when not). It blocks on a hit. The same script blocks roadmap language in chapters and the README.
+1. A secrets scanner runs before every commit (`scripts/gate.sh` runs gitleaks when installed, and a regex fallback when not), and again on GitHub on every push, over every tracked file and the git history (`.github/workflows/check.yml`). It blocks on a hit. The same script blocks roadmap language in every file but this one. On GitHub the private names list is absent, so the names check runs only before a commit on the owner's machine.
 2. Named files only. Never "add everything" on a public repository.
 3. Before any repository flips public: a scan of the entire history, and a read of every file by the author.
 4. Anything in the "Out" list found after publication is removed from history, not just from the tip, and the incident is added to the guardrails chapter.
