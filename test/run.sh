@@ -133,6 +133,18 @@ d.fields['voice.pronunciations'].answer='Beko\rBosch'; fs.writeFileSync(p,JSON.s
 if printf '5550199\n2\n' | bin/lavelle add phone --dry-run > /tmp/lavelle-break2.out 2>&1; then bad "carriage return in an answer was NOT refused"; else ok "carriage return refused, in the dry run too"; fi
 grep -q 'answer for voice.pronunciations has a line break' /tmp/lavelle-break2.out && ok "carriage-return refusal names the field" || bad "carriage-return refusal does not name the field"
 cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+# The other three of the five answers sent to the kit, one at a time, in the dry run.
+for field in owner.trade area.definition phone_module.goal; do
+  FIELD="$field" node -e "
+const p=process.env.LAVELLE_HOME+'/lavelle.json';const fs=require('fs');const d=JSON.parse(fs.readFileSync(p,'utf8'));
+const f=process.env.FIELD;
+if(f==='owner.trade')d.owner.trade='appliance\nrepair';
+if(f==='area.definition')d.fields['area.definition'].answer='Northgate\nand Eastfield';
+if(f==='phone_module.goal')d.phone_module=Object.assign(d.phone_module||{},{goal:'1\n2'});
+fs.writeFileSync(p,JSON.stringify(d,null,2));"
+  if printf '5550199\n2\n' | bin/lavelle add phone --dry-run > /tmp/lavelle-break3.out 2>&1; then bad "line break in $field was NOT refused"; else grep -q "answer for $field has a line break" /tmp/lavelle-break3.out && ok "line break in $field refused, naming the field" || bad "refusal for $field does not name it"; fi
+  cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
+done
 unset VAPI_API_KEY LAVELLE_TEST_SECRET
 
 
