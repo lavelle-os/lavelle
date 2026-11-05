@@ -68,7 +68,7 @@ grep -q 'begins with yes' /tmp/lavelle-rec.out && ok "recording refusal says why
 cp /tmp/lavelle-keep.json "$LAVELLE_HOME/lavelle.json"
 
 echo "== the voice kit is pinned to one commit, and the installer gets only the key and PATH"
-pin=$(sed -n 's/^const KIT_COMMIT = "\([0-9a-f]\{40\}\)";$/\1/p' lib/phone.mjs)
+pin=$(sed -n 's/^export const KIT_COMMIT = "\([0-9a-f]\{40\}\)";$/\1/p' lib/phone.mjs)
 [ -n "$pin" ] && ok "lib/phone.mjs names one full commit for the kit" || bad "KIT_COMMIT is missing or not a full commit"
 grep -q "checkout --detach $pin" /tmp/lavelle-phone.out && ok "dry run's clone lines land on the pinned commit" || bad "dry run's clone lines do not check out the pin"
 # A fake kit that records what it was given. It cannot be at the real pinned commit, so the first run
@@ -82,6 +82,9 @@ cp "$LAVELLE_HOME/lavelle.json" /tmp/lavelle-keep.json
 if printf '5550199\n2\n' | LAVELLE_VOICE_KIT="$kit" bin/lavelle add phone > /tmp/lavelle-pin.out 2>&1; then bad "kit at the wrong commit was NOT refused"; else ok "kit at the wrong commit refused"; fi
 grep -q 'is not the pinned one' /tmp/lavelle-pin.out && [ ! -f "$kit/received.json" ] && ok "refusal says why, and nothing in the kit ran" || bad "wrong-commit refusal reason missing or the kit ran"
 [ "$(sum)" = "$before" ] && ok "wrong-commit refusal wrote nothing" || bad "wrong-commit refusal modified the install folder"
+grep -q "fetch origin" /tmp/lavelle-pin.out && grep -q "checkout --detach $pin" /tmp/lavelle-pin.out && ok "refusal tells an existing folder how to reach the pin" || bad "refusal gives no fetch-and-checkout for the folder already there"
+LAVELLE_VOICE_KIT="$kit" bin/lavelle doctor > /tmp/lavelle-doctor3.out 2>&1
+grep -Eq 'voice kit +missing .*add phone would refuse it' /tmp/lavelle-doctor3.out && ok "doctor says the kit would be refused, not ok" || bad "doctor called a kit at the wrong commit ok"
 pinned="$(mktemp -d)/lavelle"; mkdir -p "$pinned"; cp -R bin lib questions package.json "$pinned/"
 node -e "
 const fs=require('fs');const p=process.argv[1]+'/lib/phone.mjs';

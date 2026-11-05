@@ -73,5 +73,5 @@ Every question can be answered from a file: one line per answer, in the order as
 4. Open `lavelle/owner.md` and `lavelle/lavelle.json` and read your answers as a caller would hear them.
 5. Type `bin/lavelle doctor`. Everything it can see should say ok except the kit and the key, and it will exit with a 1 because of those two.
 6. Type `bin/lavelle add phone --dry-run` and read what it would send before it sends anything.
-7. Get the kit with the clone line the dry run printed, set the key in the environment for one terminal session, type `bin/lavelle add phone`, and make the test call from the kit's protocol before any real caller does.
+7. Get the kit with the two clone lines the dry run printed (run `bin/lavelle doctor` again: the voice kit line says ok only when the kit is at the pinned commit), set the key in the environment for one terminal session, type `bin/lavelle add phone`, and make the test call from the kit's protocol before any real caller does.
 8. The first thing that will go wrong: the number you give as the transfer number is the one you just forwarded to the agent, and the command will refuse you. That refusal is the chapter working.
